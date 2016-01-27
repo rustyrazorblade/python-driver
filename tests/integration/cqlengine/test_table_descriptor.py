@@ -29,9 +29,11 @@ class TableCallTest(BaseCassEngTestCase):
         id = Integer(primary_key=True)
         value = Text()
 
+    @classmethod
     def setUpClass(cls):
         sync_table(cls.BucketTableTest)
 
+    @classmethod
     def tearDownClass(cls):
         drop_table(cls.BucketTableTest)
 
@@ -39,5 +41,5 @@ class TableCallTest(BaseCassEngTestCase):
         tmp = self.BucketTableTest.table("bucket_table_test_jan_2016")
         # queryset should have a this table registered
 
-        
+
 

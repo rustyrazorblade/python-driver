@@ -265,6 +265,7 @@ class AbstractQuerySet(object):
         self._timestamp = None
         self._if_not_exists = False
         self._timeout = connection.NOT_SET
+        self._table = None  # to override a the table a query uses
 
     @property
     def column_family_name(self):
@@ -856,6 +857,15 @@ class ModelQuerySet(AbstractQuerySet):
         """
         clone = copy.deepcopy(self)
         clone._ttl = ttl
+        return clone
+
+    def table(self, table):
+        """
+        sets the table we're going to use for this query
+        overrides the model's table
+        """
+        clone = copy.deepcopy(self)
+        clone._table = table
         return clone
 
     def timestamp(self, timestamp):

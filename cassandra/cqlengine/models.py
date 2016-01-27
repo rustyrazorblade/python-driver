@@ -320,6 +320,7 @@ class BaseModel(object):
     ttl = TTLDescriptor()
     consistency = ConsistencyDescriptor()
     iff = TransactionDescriptor()
+    table = TableDescriptor()
 
     # custom timestamps, see USING TIMESTAMP X
     timestamp = TimestampDescriptor()
