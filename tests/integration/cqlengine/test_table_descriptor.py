@@ -38,8 +38,9 @@ class TableCallTest(BaseCassEngTestCase):
         drop_table(cls.BucketTableTest)
 
     def test_create_queryset(self):
-        tmp = self.BucketTableTest.table("bucket_table_test_jan_2016")
+        tmp = self.BucketTableTest.table("some_other_name")
         # queryset should have a this table registered
-
-
+        assert tmp._table == "some_other_name"
+        s = str(tmp)
+        assert "some_other_name" in s
 
