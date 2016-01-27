@@ -152,6 +152,28 @@ class TTLDescriptor(object):
     def __call__(self, *args, **kwargs):
         raise NotImplementedError
 
+class TableDescriptor(object):
+    """
+    returns a query set descriptor
+    overrides the table that we're querying
+    useful for table that are partitioned by month, etc
+
+    for example: raw_ts_data_jan_2016
+
+    this lets us use a single model to query many tables
+    that have the same structure.
+    """
+    def __get__(self, instance, model):
+        if instance:
+            def table_setattr(name):
+                instance._table = name
+                return instance
+            return table_setattr
+
+        return model.objects.table
+
+    def __call__(self, *args, **kwargs):
+        raise NotImplementedError
 
 class TimestampDescriptor(object):
     """
