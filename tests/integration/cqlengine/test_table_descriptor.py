@@ -16,10 +16,13 @@
 Tests the .table() descriptor functions as advertised
 """
 
+import mock
+
 from tests.integration.cqlengine.base import BaseCassEngTestCase
 from cassandra.cqlengine.models import Model
 from cassandra.cqlengine.management import sync_table, drop_table
 from cassandra.cqlengine.columns import Integer, Text
+
 
 from tests.integration import PROTOCOL_VERSION
 
@@ -46,6 +49,15 @@ class TableCallTest(BaseCassEngTestCase):
 
 
     def test_save_model_to_new_table(self):
-        pass
+        sync_table(self.BucketTableTest, name="bucket_2016")
+
+        tmp = self.BucketTableTest.create(id=1, value="test")
+
+        with mock.patch.object(self.session, 'execute') as m:
+            tmp.table("bucket_2016").save()
+
+        assert m.call_count > 0
+
+        drop_table(self.BucketTableTest, name="bucket_2016")
 
 

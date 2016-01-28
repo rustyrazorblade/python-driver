@@ -269,7 +269,9 @@ class AbstractQuerySet(object):
 
     @property
     def column_family_name(self):
-        return self.model.column_family_name()
+        # modified to allow for .table()
+        # can alter the table used on a per query basis
+        return self._table or self.model.column_family_name()
 
     def _execute(self, q):
         if self._batch:
@@ -326,6 +328,7 @@ class AbstractQuerySet(object):
         """
         if self._where:
             self._validate_select_where()
+
         return SelectStatement(
             self.column_family_name,
             fields=self._select_fields(),
