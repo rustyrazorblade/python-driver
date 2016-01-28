@@ -107,7 +107,7 @@ def drop_keyspace(name):
         execute("DROP KEYSPACE {0}".format(metadata.protect_name(name)))
 
 
-def sync_table(model):
+def sync_table(model, name=None):
     """
     Inspects the model and creates / updates the corresponding table and columns.
 
@@ -122,6 +122,8 @@ def sync_table(model):
     Take care to execute schema modifications in a single context (i.e. not concurrently with other clients).**
 
     *There are plans to guard schema-modifying functions with an environment-driven conditional.*
+
+    name can be used to override the model name
     """
     if not _allow_schema_modification():
         return
@@ -132,7 +134,7 @@ def sync_table(model):
     if model.__abstract__:
         raise CQLEngineException("cannot create table from abstract model")
 
-    cf_name = model.column_family_name()
+    cf_name = name or model.column_family_name()
     raw_cf_name = model._raw_column_family_name()
 
     ks_name = model._get_keyspace()
@@ -388,7 +390,7 @@ def _update_options(model):
     return False
 
 
-def drop_table(model):
+def drop_table(model, name=None):
     """
     Drops the table indicated by the model, if it exists.
 
@@ -396,6 +398,8 @@ def drop_table(model):
     Take care to execute schema modifications in a single context (i.e. not concurrently with other clients).**
 
     *There are plans to guard schema-modifying functions with an environment-driven conditional.*
+
+    name can be used to override the model name
     """
     if not _allow_schema_modification():
         return

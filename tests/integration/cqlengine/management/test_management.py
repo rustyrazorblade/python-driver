@@ -52,6 +52,10 @@ class KeyspaceManagementTest(BaseCassEngTestCase):
         management.drop_keyspace(keyspace_nts)
         self.assertNotIn(keyspace_nts, cluster.metadata.keyspaces)
 
+    def test_sync_table_with_alternate_name(self):
+        sync_table(self.BucketTableTest, name="test_sync_table_with_alternate_name")
+        drop_table(self.BucketTableTest, name="test_sync_table_with_alternate_name")
+        assert False
 
 class DropTableTest(BaseCassEngTestCase):
 

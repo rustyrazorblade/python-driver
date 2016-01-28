@@ -44,3 +44,8 @@ class TableCallTest(BaseCassEngTestCase):
         s = str(tmp)
         assert "some_other_name" in s
 
+
+    def test_save_model_to_new_table(self):
+        pass
+
+
