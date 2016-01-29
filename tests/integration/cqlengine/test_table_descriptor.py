@@ -53,6 +53,7 @@ class TableCallTest(BaseCassEngTestCase):
 
         tmp = self.BucketTableTest.create(id=1, value="test")
 
+        # make sure we're saving the entire row to the new table
         with mock.patch.object(self.session, 'execute') as m:
             tmp.table("bucket_2016").save()
 
@@ -60,4 +61,16 @@ class TableCallTest(BaseCassEngTestCase):
 
         drop_table(self.BucketTableTest, name="bucket_2016")
 
+
+    def test_write_and_write_directs_to_correct_table(self):
+        sync_table(self.BucketTableTest, name="bucket_2016")
+
+        with mock.patch.object(self.session, 'execute') as m:
+            self.BucketTableTest.table("bucket_2016").create(id=1, value="test")
+
+        assert "bucket_2016" in m.call_args[0][0].query_string
+
+        tmp = self.BucketTableTest.table("bucket_2016").get(id=1)
+
+        tmp = self.BucketTableTest.table("bucket_2016").objects(id=1)
 
