@@ -714,7 +714,8 @@ class AbstractQuerySet(object):
         return self._only_or_defer('defer', fields)
 
     def create(self, **kwargs):
-        return self.model(**kwargs).batch(self._batch).ttl(self._ttl).\
+        return self.model(**kwargs).table(self._table).\
+            batch(self._batch).ttl(self._ttl).\
             consistency(self._consistency).if_not_exists(self._if_not_exists).\
             timestamp(self._timestamp).save()
 
