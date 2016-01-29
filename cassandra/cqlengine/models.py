@@ -662,6 +662,7 @@ class BaseModel(object):
 
         self.validate()
         self.__dmlquery__(self.__class__, self,
+                          table=self._table_name,
                           batch=self._batch,
                           ttl=self._ttl,
                           timestamp=self._timestamp,

@@ -714,6 +714,7 @@ class AbstractQuerySet(object):
         return self._only_or_defer('defer', fields)
 
     def create(self, **kwargs):
+        import ipdb; ipdb.set_trace()
         return self.model(**kwargs).table(self._table).\
             batch(self._batch).ttl(self._ttl).\
             consistency(self._consistency).if_not_exists(self._if_not_exists).\
@@ -1035,11 +1036,12 @@ class DMLQuery(object):
     _consistency = None
     _timestamp = None
     _if_not_exists = False
+    _table = None
 
     def __init__(self, model, instance=None, batch=None, ttl=None, consistency=None, timestamp=None,
                  if_not_exists=False, transaction=None, timeout=connection.NOT_SET):
         self.model = model
-        self.column_family_name = self.model.column_family_name()
+        self.column_family_name = self._table or self.model.column_family_name()
         self.instance = instance
         self._batch = batch
         self._ttl = ttl
