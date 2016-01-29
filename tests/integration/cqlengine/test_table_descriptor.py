@@ -67,8 +67,8 @@ class TableCallTest(BaseCassEngTestCase):
 
         with mock.patch.object(self.session, 'execute') as m:
             self.BucketTableTest.table("bucket_2016").create(id=1, value="test")
-
-        assert "bucket_2016" in m.call_args[0][0].query_string
+        query = m.call_args[0][0].query_string
+        assert "bucket_2016" in query, query
 
         tmp = self.BucketTableTest.table("bucket_2016").get(id=1)
 
